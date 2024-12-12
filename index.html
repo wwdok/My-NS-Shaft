@@ -133,6 +133,10 @@
 	<script>
 	document.getElementById('close-rules').addEventListener('click', function() {
 		document.getElementById('rules-modal').style.display = 'none';
+		// 在用户第一次交互时播放 BGM
+		if (Game.Audio && Game.Audio.initialized && !Game.Audio.playing) {
+			Game.Audio.playBGM();
+		}
 	});
 	</script>
 	<script>

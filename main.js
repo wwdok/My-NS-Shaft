@@ -852,7 +852,6 @@
 	function init(res) {
 		$res = res;
 		Game.Audio.init();
-		Game.Audio.playBGM();
 
 		$canvas = document.createElement('canvas');
 		$canvas.style.display = 'block';
@@ -1083,6 +1082,7 @@
 	Game.Audio = {
 		sounds: {},
 		playing: false,
+		initialized: false,
 		
 		init: function() {
 			// 预载所有音效
@@ -1096,20 +1096,22 @@
 			for (let key in audioFiles) {
 				const audio = new Audio(audioFiles[key]);
 				if (key === 'bgm') {
-					audio.loop = true;
-					audio.volume = 0.5;
-					audio.addEventListener('playing', () => {
-						this.playing = true;
-					});
-					audio.addEventListener('pause', () => {
-						this.playing = false;
-					});
-					audio.addEventListener('ended', () => {
-						this.playing = false;
-					});
+						audio.loop = true;
+						audio.volume = 0.5;
+						audio.addEventListener('playing', () => {
+							this.playing = true;
+						});
+						audio.addEventListener('pause', () => {
+							this.playing = false;
+						});
+						audio.addEventListener('ended', () => {
+							this.playing = false;
+						});
 				}
+				
 				this.sounds[key] = audio;
 			}
+			this.initialized = true;
 		},
 		
 		play: function(soundName) {
