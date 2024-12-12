@@ -543,6 +543,7 @@
 		hurt : function(num, time) {
 			this.hurtTime = time;
 			this.life = Math.max(0, this.life - num);
+			Game.Audio.play('hurt');
 			topBarChange = true;
 		}
 	});
@@ -730,7 +731,7 @@
 			context.clearRect(0, 0, STAGE_WIDTH, MARGIN_TOP);
 			context.fillStyle = '#000';
 			context.font = '12pt monospace';
-			context.fillText('life: ' + 'oooooooooo----------'.substr(10 - hero.life, 10) + '  score: ' + score, 10, 24);
+			context.fillText('生命值: ' + 'oooooooooo----------'.substr(10 - hero.life, 10) + '  得分: ' + score, 10, 24);
 			context.restore();
 		}
 
@@ -766,6 +767,10 @@
 		if (hero.onFloor) {
 			var floor = hero.onFloor;
 			floor.standing(hero, time);
+		} else {
+			if (hero.vy < 0) {
+				Game.Audio.play('jump');
+			}
 		}
 		generateFloor();
 		removeOutboundFloor();
@@ -800,6 +805,8 @@
 			}
 			if (ended) {
 				isCooldownTime = true;
+				Game.Audio.play('gameover');
+				Game.Audio.stopBGM();
 				setTimeout(function() {
 					isCooldownTime = false;
 					drawAll($ctx, time);
@@ -844,14 +851,13 @@
 
 	function init(res) {
 		$res = res;
+		Game.Audio.init();
+		Game.Audio.playBGM();
+
 		$canvas = document.createElement('canvas');
-		// $canvas.width = STAGE_WIDTH;
-		// $canvas.height = STAGE_HEIGHT;
-		// $canvas.style.width = '0px';
-		// $canvas.style.height = '0px';
-		// $canvas.style.transition = 'width 0.5s, height 0.5s';
 		$canvas.style.display = 'block';
 		$canvas.style.margin = '0 auto';
+		
 		clearNode($wrap);
 		$wrap.appendChild($canvas);
 
@@ -912,7 +918,7 @@
 			var touch = e.changedTouches[0];
 			if (touch) {
 				if (!isRunning) {
-					if (!isCooldownTime && e.target == $canvas) {
+					if (!isCooldownTime) {
 						spacePressed = touch.identifier;
 						drawAll($ctx, lastTime);
 					}
@@ -982,6 +988,9 @@
 		}
 		if (judge()) {
 			fireEvent('gameStart');
+			if (!Game.Audio.playing) {
+				Game.Audio.playBGM();
+			}
 			//create world
 			FloorSeq.reset();
 			floorArray = [];
@@ -1011,14 +1020,13 @@
 
 	Game.Audio = {
 		sounds: {},
+		playing: false,
 		
 		init: function() {
-			// 预加载所有音效
+			// 预载所有音效
 			const audioFiles = {
 				'jump': 'sounds/jump.mp3',
-				'land': 'sounds/land.mp3',
 				'hurt': 'sounds/hurt.mp3',
-				'heal': 'sounds/heal.mp3',
 				'gameover': 'sounds/gameover.mp3',
 				'bgm': 'sounds/bgm.mp3'
 			};
@@ -1028,6 +1036,15 @@
 				if (key === 'bgm') {
 					audio.loop = true;
 					audio.volume = 0.5;
+					audio.addEventListener('playing', () => {
+						this.playing = true;
+					});
+					audio.addEventListener('pause', () => {
+						this.playing = false;
+					});
+					audio.addEventListener('ended', () => {
+						this.playing = false;
+					});
 				}
 				this.sounds[key] = audio;
 			}
@@ -1046,11 +1063,12 @@
 			if (this.sounds.bgm) {
 				this.sounds.bgm.pause();
 				this.sounds.bgm.currentTime = 0;
+				this.playing = false;
 			}
 		},
 		
 		playBGM: function() {
-			if (this.sounds.bgm) {
+			if (this.sounds.bgm && !this.playing) {
 				this.sounds.bgm.play().catch(e => console.log('BGM播放失败:', e));
 			}
 		}
