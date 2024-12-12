@@ -72,6 +72,39 @@
 	#close-rules:hover {
 		background: #45a049;
 	}
+	
+	/* 移动控制按钮样式 */
+	#mobile-controls {
+		position: fixed;
+		bottom: 20px;
+		left: 0;
+		right: 0;
+		display: flex;
+		justify-content: center;
+		gap: 20px;
+		z-index: 100;
+	}
+	
+	.control-btn {
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.6);
+		border: none;
+		font-size: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+		user-select: none;
+		touch-action: manipulation;
+	}
+	
+	.control-btn:active {
+		background: rgba(255, 255, 255, 0.8);
+		transform: scale(0.95);
+	}
 </style>
 </head>
 <body>
@@ -88,6 +121,13 @@
 			<dd><strong>游戏结束</strong>：掉出屏幕底部或生命值耗尽</dd>
 		</dl>
 		<button id="close-rules">开始游戏</button>
+	</div>
+	
+	<!-- 移动控制按钮 -->
+	<div id="mobile-controls">
+		<button class="control-btn" id="btn-left">⬅️</button>
+		<button class="control-btn" id="btn-jump">⬆️</button>
+		<button class="control-btn" id="btn-right">➡️</button>
 	</div>
 	
 	<script>

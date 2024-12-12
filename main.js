@@ -980,6 +980,68 @@
 		}, false);
 		//start loop
 		start();
+
+		// 添加移动控制按钮事件
+		var btnLeft = document.getElementById('btn-left');
+		var btnRight = document.getElementById('btn-right');
+		var btnJump = document.getElementById('btn-jump');
+
+		// 左移按钮
+		btnLeft.addEventListener('touchstart', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			leftPressed = -1;
+			hero.turnLeft();
+		}, false);
+
+		btnLeft.addEventListener('touchend', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			leftPressed = NaN;
+			if (isFinite(rightPressed)) {
+				hero.turnRight();
+			} else {
+				hero.stay();
+			}
+		}, false);
+
+		// 右移按钮
+		btnRight.addEventListener('touchstart', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			rightPressed = 1;
+			hero.turnRight();
+		}, false);
+
+		btnRight.addEventListener('touchend', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			rightPressed = NaN;
+			if (isFinite(leftPressed)) {
+				hero.turnLeft();
+			} else {
+				hero.stay();
+			}
+		}, false);
+
+		// 跳跃/开始按钮
+		btnJump.addEventListener('touchstart', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			if (!isRunning && !isCooldownTime) {
+				spacePressed = -1;
+				drawAll($ctx, lastTime);
+			}
+		}, false);
+
+		btnJump.addEventListener('touchend', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			if (isFinite(spacePressed)) {
+				spacePressed = NaN;
+				start();
+			}
+		}, false);
 	}
 
 	function start() {
