@@ -109,5 +109,24 @@
 		});
 	}();
 	</script>
+	<div id="audio-controls" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
+		<button id="toggleAudio" style="padding: 5px; background: rgba(255,255,255,0.7); border: none; border-radius: 5px;">
+			🔊
+		</button>
+	</div>
+	<script>
+	document.getElementById('toggleAudio').addEventListener('click', function() {
+		const button = this;
+		const muted = !Game.Audio.sounds.bgm.muted;
+		
+		// 切换所有音效的静音状态
+		for (let key in Game.Audio.sounds) {
+			Game.Audio.sounds[key].muted = muted;
+		}
+		
+		// 更新按钮图标
+		button.textContent = muted ? '🔈' : '🔊';
+	});
+	</script>
 </body>
 </html>

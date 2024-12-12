@@ -699,9 +699,9 @@
 				context.font = 'bold 32pt monospace';
 				context.strokeStyle = '#fff';
 				context.lineWidth = 6;
-				context.strokeText('Game Over', 0, 10);
+				context.strokeText('游戏结束', 0, 10);
 				context.fillStyle = '#000';
-				context.fillText('Game Over', 0, 10);
+				context.fillText('游戏结束', 0, 10);
 			} else {
 				if (!isFinite(spacePressed)) {
 					context.beginPath();
@@ -717,7 +717,7 @@
 				context.fillStyle = '#000';
 				context.font = 'bold 24pt monospace';
 				context.textAlign = 'center';
-				context.fillText(judge() ? 'play again' : 'continue', 0, 10);
+				context.fillText(judge() ? '再玩一次' : '继续', 0, 10);
 			}
 			context.restore();
 		}
@@ -1008,5 +1008,52 @@
 
 	Game.on = onEvent;
 	Game.off = offEvent;
+
+	Game.Audio = {
+		sounds: {},
+		
+		init: function() {
+			// 预加载所有音效
+			const audioFiles = {
+				'jump': 'sounds/jump.mp3',
+				'land': 'sounds/land.mp3',
+				'hurt': 'sounds/hurt.mp3',
+				'heal': 'sounds/heal.mp3',
+				'gameover': 'sounds/gameover.mp3',
+				'bgm': 'sounds/bgm.mp3'
+			};
+			
+			for (let key in audioFiles) {
+				const audio = new Audio(audioFiles[key]);
+				if (key === 'bgm') {
+					audio.loop = true;
+					audio.volume = 0.5;
+				}
+				this.sounds[key] = audio;
+			}
+		},
+		
+		play: function(soundName) {
+			const sound = this.sounds[soundName];
+			if (sound) {
+				// 重新播放音效
+				sound.currentTime = 0;
+				sound.play().catch(e => console.log('音频播放失败:', e));
+			}
+		},
+		
+		stopBGM: function() {
+			if (this.sounds.bgm) {
+				this.sounds.bgm.pause();
+				this.sounds.bgm.currentTime = 0;
+			}
+		},
+		
+		playBGM: function() {
+			if (this.sounds.bgm) {
+				this.sounds.bgm.play().catch(e => console.log('BGM播放失败:', e));
+			}
+		}
+	};
 
 }(window);
