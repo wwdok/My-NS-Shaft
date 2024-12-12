@@ -1,7 +1,15 @@
 # NS-SHAFT
+
 This is an imitation of the [NS-SHAFT](https://en.wikipedia.org/wiki/NS-Shaft) game, which also named as "是男人就下一百层" or "小朋友下樓梯".
 
-[Click here to play](https://ipel.github.io/NS-SHAFT/) and have fun!
+fork from: https://github.com/iPel/NS-SHAFT
+更新点：
+1.部署到netlify：https://calm-meerkat-1f0ff7.netlify.app/
+2.汉化
+3.添加背景音乐
+4.手机兼容性（加按钮、改背景颜色等）
+
+[Click here to play](https://calm-meerkat-1f0ff7.netlify.app/) and have fun!
 
 ## Screenshot
 ![ns-shaft screenshot](https://user-images.githubusercontent.com/1459980/29251832-f816b9d0-808e-11e7-9bbc-c03d5da87973.jpg)
