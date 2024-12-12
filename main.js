@@ -729,6 +729,8 @@
 			topBarChange = false;
 			context.save();
 			context.clearRect(0, 0, STAGE_WIDTH, MARGIN_TOP);
+			context.fillStyle = '#ffffff';
+			context.fillRect(0, 0, STAGE_WIDTH, MARGIN_TOP);
 			context.fillStyle = '#000';
 			context.font = '12pt monospace';
 			context.fillText('生命值: ' + 'oooooooooo----------'.substr(10 - hero.life, 10) + '  得分: ' + score, 10, 24);
